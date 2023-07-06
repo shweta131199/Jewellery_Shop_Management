@@ -1,0 +1,179 @@
+create  database  jewellery;
+use jewellery;
+
+create table shop_keeper
+(
+  sk_name varchar(30) primary key,
+  sk_pass varchar(10),
+  sk_addr varchar(100),
+  sk_phone varchar(10),
+  que varchar(20),
+  ans varchar(20)
+);
+
+insert into shop_keeper values('komal','komal99','Pune','9561545833','Favourit Game','Karam');
+
+***************************************************************************************
+
+create table product
+(
+  pid int primary key,
+  ptype varchar(30),
+  pname varchar(20),
+  qnt int,
+  comp varchar(20),
+  price int,
+  pack_date date,
+  exp_date date,
+  sk_name varchar(30),
+  constraint foreign key(sk_name) references shop_keeper(sk_name)
+);
+
+insert into product values(10,'Hair Product','HairOil',500,'Bajaj',200,'2010-04-15','2011-04-14','pooja');
+insert into product values(11,'Hair Product','Shampoo',600,'Sunsilk',100,'2012-01-21','2012-07-26','varsha');
+
+
+insert into product values(12,'Eye Product','Kajal',400,'Lakme',200,'2014-05-21','2016-05-22','pooja');
+insert into product values(13,'Eye Product','Maskara',200,'Oriflem',250,'2014-03-13','2014-07-10','varsha');
+
+insert into product values(14,'Lip Product','Lipstic',150,'Lorial',300,'2012-07-04','2013-02-11','varsha');
+insert into product values(15,'Lip Product','Lip Balm',100,'Baby Lips',300,'2012-07-04','2013-02-11','pooja');
+
+insert into product values(16,'Skin Product','Creem',500,'Olay',350,'2012-11-04','2013-06-11','pooja');
+insert into product values(17,'Skin Product','Compack',80,'Lakme',250,'2010-10-01','2013-03-18','pooja');
+
+insert into product values(18,'Nail Product','Nailpaint',300,'Vov',70,'2010-06-12','2012-03-18','varsha');
+insert into product values(19,'Nail Product','NailArt',200,'Elitene',50,'2010-9-01','2011-03-01','pooja');
+
+insert into product values(20,'Perfume Product','Deo',250,'Nivea',150,'2014-10-01','2015-03-16','varsha');
+
+**************************************************************************************
+create table customer
+(
+ cid int primary key,
+ cname varchar(50),
+ addr varchar(20),
+ ph_no varchar(10),
+ date date
+);
+
+insert into customer values(111,'Mehta riya','F.C.road','7709355307','2015-01-01');
+insert into customer values(112,'Gandhi soniya','Baramati','9678453256','2014-09-25');
+insert into customer values(113,'Bobade smita','satara','9422547232','2013-05-21');
+insert into customer values(114,'Jadhav kirti','Daund','9532456217','2014-09-28');
+insert into customer values(115,'Shelar Monika','Daund','9966754327','2012-12-02');
+
+***************************************************************************************
+
+create table cust_prod
+(
+  pid int,
+  cid int,
+ constraint foreign key(pid) references product(pid),
+ constraint foreign key(cid) references customer(cid)
+);
+
+**************************************************************************************
+create table bill
+(b_no int primary key,
+  b_date date,
+  tot int
+);
+
+ insert into bill values(1001,'2015-08-02',400);
+
+ 
+***************************************************************************************
+create table prod_bill
+( t_id int primary key,
+  b_no int,
+  b_date date,
+  b_time time,
+  cname varchar(50),
+  pname varchar(50),
+  ptype varchar(50),
+  cid int,
+  pid int,
+  price int,
+  qnt int,
+  tot int,
+  constraint foreign key(cid) references customer(cid),
+  constraint foreign key(pid) references product(pid)
+  
+);
+
+insert into prod_bill values(1,1001,'2015-08-02','12:02:00','Mehta riya','Hair oil','Hair Product',111,10,200,2,400);
+***************************************************************************************  
+create table suplier
+(
+ s_id int primary key,
+ sname varchar(30),
+ s_phone varchar(10),
+ sdate date
+
+);
+insert into suplier values(1,'J.K.Shah','9921345674','2015-10-12');
+insert into suplier values(2,'S.S.Khan','9922355652','2014-12-12');
+
+***************************************************************************************
+
+create table stock
+ (
+  stock_name varchar(20),
+  sdate date,
+  stot int,
+  stype varchar(20),
+  sprice int,
+  scmny varchar(20),
+  s_id int references suplier(s_id)
+);
+insert into stock values('HairOil','2015-02-12',500,'Hair Product',200,'Bajaj',1);
+insert into stock values('Shampoo','2015-02-12',600,'Hair Product',100,'Sunsilk',1);
+insert into stock values('Kajal','2015-02-12',400,'Eye Product',200,'Lakme',1);
+insert into stock values('Maskara','2015-02-12',200,'Hair Product',250,'Oriflem',1);
+insert into stock values('Lipstic','2015-02-12',150,'Lip Product',300,'Lorial',1);
+insert into stock values('Lip Balm','2015-02-12',100,'Lip Product',300,'Baby Lips',1);
+insert into stock values('Creem','2015-02-12',500,'Skin Product',350,'Olay',1);
+insert into stock values('Compack','2015-02-12',80,'Skin Product',250,'Lakme',1);
+insert into stock values('NailPaint','2015-02-12',300,'Nail Product',70,'Vov',1);
+insert into stock values('NailArt','2015-02-12',200,'Nail Product',50,'Elitene',1);
+insert into stock values('Deo','2015-02-12',250,'Perfume Product',150,'Nevia',2);
+
+
+
+**************************************************************************************
+create table prod_stock
+ (
+   p_id int references product(p_id),  
+   s_id int references supplier(s_id)
+ );
+
+****************************************************************************************
+create table suppl_shop
+(
+t_id numeric(5),
+sk_name varchar(30),
+s_id numeric(5),
+sname varchar(30),
+inst_amt int,
+tot_amt int,
+rem_amt int,
+suppl_date date,
+constraint foreign key(sk_name) references shop_keeper(sk_name),
+constraint foreign key(s_id) references supplier(s_id)
+);
+insert into suppl_shop(t_id,sk_name,s_id,sname,inst_amt,tot_amt,rem_amt,suppl_date)values(10,'pooja',1,'Mr Shah',2000,25000,23000,'2013-12-21');
+insert into suppl_shop(t_id,sk_name,s_id,sname,inst_amt,tot_amt,rem_amt,suppl_date)values(11,'pooja',2,'Mr Khatri',1500,45000,43500,'2014-12-31');
+***************************************************************************
+create table orders
+(
+o_id numeric(5) primary key,
+o_name varchar(30),
+o_qnt int,
+o_company varchar(30),
+o_date date
+);
+
+insert into orders(o_id,o_name,o_qnt,o_company,o_date)values(11,'Lip Balm',100,'Baby Lip','2014-12-12');
+insert into orders(o_id,o_name,o_qnt,o_company,o_date)values(12,'Nail Paint',150,'Ori-Flame','2014-12-02');
+

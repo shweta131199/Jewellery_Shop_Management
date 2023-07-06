@@ -1,0 +1,201 @@
+create  database  komal;
+use komal;
+
+
+create table mylogin
+(
+login_name varchar(50) primary key,
+password varchar(10),
+que varchar(20),
+ans varchar(20)
+);
+
+insert into mylogin values ('admin','admin123','First Bike','Shine');
+insert into mylogin values ('komal','komal99','I Love','India');
+
+select * from mylogin;
+
+
+
+create table product
+(
+  pid int primary key,
+  ptype varchar(30),
+  pname varchar(20),
+  qnt int,
+  comp varchar(20),
+  price int,
+  login_name varchar(30),
+  constraint foreign key(login_name) references mylogin(login_name)
+);
+
+insert into product values(10,'Hair Product','HairOil',500,'Bajaj',200,'04-151','04-14-2015','komal');
+
+
+
+
+create table cust_info
+(
+  c_id int primary key,
+c_name varchar(20),
+c_add varchar(50),
+c_phone long,
+c_mail varchar(50)
+
+);
+
+insert into cust_info values(1,'AA','XYZ',1234567890,'AA@gmail.com');
+
+insert into cust_info values(3,'komal','pune',1234567890,'komal@gmail.com');
+insert into cust_info values(2,'pranita','baramati',1234575585,'pranita@gmail.com');
+
+create table cust_bill
+(
+ cbill int primary key,
+dt date,
+c_id int,
+pid int,
+rate int,
+amt int,
+discount int,
+f_amt int,
+
+constraint fk_key1 foreign key(c_id) references cust_info(c_id),
+
+constraint fk_key2 foreign key(pid) references product(pid)
+
+);
+
+
+
+insert into cust_bill values(1,'2018-12-03',1,10,5000,6000,100,5900);
+
+
+
+create table cust_prod
+(
+pid int,
+c_id int,
+ constraint foreign key(pid) references product(pid),
+ constraint foreign key(c_id) references cust_info(c_id)
+);
+
+insert into cust_prod values(10,1);
+insert into cust_prod values(11,112);
+
+
+
+
+create table bill
+(
+b_no integer primary key,  
+ c_name varchar(30),
+ p_name varchar(30),
+ price integer,
+ gst   float,
+t_amt  integer,
+pid int,
+c_id int,
+  constraint foreign key(pid) references product(pid),
+  constraint foreign key(c_id) references cust_info(c_id)
+);
+
+insert into bill values(1,'komal','ring',5000,500,5500,10,3);
+
+
+ 
+create table prod_bill1
+( t_id int primary key,
+  b_no int,
+  b_date date,
+  b_time time,
+  cname varchar(50),
+  pname varchar(50),
+  ptype varchar(50),
+  c_id int,
+  pid int,
+  price int,
+  qnt int,
+  tot int,
+  constraint foreign key(c_id) references cust_info(c_id),
+  constraint foreign key(pid) references product(pid)
+  
+);
+
+insert into prod_bill1 values(1,1001,'2015-08-02','12:02:00','Mehta riya','Earrings','jewellery product',1,10,200,2,400);
+insert into prod_bill1 values(2,1002,'2015-06-02','12:02:00','komal','Earrings','jewellery product',1,10,300,3,500);
+insert into prod_bill1  values(3,1003,'2015-04-02','12:02:00','pranita','Earrings','jewellery product',1,10,400,4,600);
+
+
+
+  
+create table suplier
+(
+ s_id int primary key,
+ sname varchar(30),
+ s_phone varchar(10),
+ sdate date
+
+);
+insert into suplier values(1,'J.K.Shah','9921345674','2015-10-12');
+insert into suplier values(2,'S.S.kothari','9922355652','2014-12-12');
+
+
+
+create table stock
+ (
+  stock_name varchar(20),
+  sdate date,
+  stot int,
+  stype varchar(20),
+  sprice int,
+  scmny varchar(20),
+  s_id int references suplier(s_id)
+);
+insert into stock values('Earrings','2020-02-12',500,'jewellery Product',200,'Necklace',1);
+insert into stock values('Bracelet','2020-02-12',600,'jewellery Product',100,'Chain',1);
+
+
+
+create table prod_stock
+ (
+   p_id int references product(p_id),  
+   s_id int references supplier(s_id)
+ );
+
+ 
+ insert into prod_stock values(10,1);
+  insert into prod_stock values(11,2);
+
+
+create table suppl_shop
+(
+t_id int primary key,
+s_id int,
+s_name varchar(30),
+inst_amt int,
+tot_amt int,
+rem_amt int,
+suppl_date date,
+ 
+  constraint foreign key(s_id) references suplier(s_id)
+
+);
+
+
+insert into suppl_shop values(10,1,'J.K.Shah',2000,25000,23000,'2013-12-21');
+insert into suppl_shop values(11,2,'S.S.kothari',3000,30000,28000,'2015-08-30');
+
+
+create table orders
+(
+o_id numeric(5) primary key,
+o_name varchar(30),
+o_qnt int,
+o_company varchar(30),
+o_date date
+);
+
+insert into orders(o_id,o_name,o_qnt,o_company,o_date)values(11,'Earrings',100,'Necklace','2014-12-12');
+insert into orders(o_id,o_name,o_qnt,o_company,o_date)values(12,'Bracelet',150,'Chain','2014-12-02');
+
